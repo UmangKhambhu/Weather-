@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <style>
+    body {
+      background-image: url('/background.avif');
+      background-size: cover;
+      background-position: center;
+    }
+    .container {
+      padding-top: 50px;
+    }
+    .container{
+      background-color: white;
+      justify-content: center;
+      align-items: center;
+    }
+    h1{
+      color: brown;
+      font-family: 'Times New Roman', Times, serif;
+    }
+    h1:hover{
+      color: black;
+      border: 2px solid black;
+    }
+    button{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: white;
+      color: brown;
+    }
+    button:hover{
+      background-color: brown;
+      color: white;
+    }
+ 
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="center-align">Weather App</h1>
+    <div class="row">
+      <div class="input-field col s12 m6 offset-m3">
+        <input type="text" id="cityInput" class="validate">
+        <label for="cityInput">Enter City Name</label>
+      </div>
+    </div>
+    <div class="row center-align">
+      <button class="btn waves-effect waves-light" onclick="fetchWeather()">Get Weather</button>
+    </div>
+    <div class="row">
+      <div id="weatherInfo" class="col s12"></div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    function fetchWeather() {
+      const city = document.getElementById('cityInput').value;
+      const apiKey = '015f936e976f5f8762d967b31b1824bb'; 
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const weatherInfo = `
+            <h3>Weather in ${data.name}</h3>
+            <p>Temperature: ${data.main.temp}°C</p>
+            <p>Description: ${data.weather[0].description}</p>
+            <p>Humidity: ${data.main.humidity}%</p>
+            <p>Wind Speed: ${data.wind.speed} m/s</p>
+          `;
+          document.getElementById('weatherInfo').innerHTML = weatherInfo;
+        })
+        .catch(error => {
+          console.error('Error fetching weather:', error);
+          document.getElementById('weatherInfo').innerHTML = '<p>Error fetching weather data. Please try again later.</p>';
+        });
+    }
+  </script>
+</body>
+</html>
